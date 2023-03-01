@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+
+<head>
+    <title>JS Random BG Color Generator</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="A JavaScript practice exercise in creating a random background color generator.">
+    <meta name="keywords" content="HTML, CSS, JavaScript, Practice">
+    <meta name="author" content="Martin Veskilt">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: rgb(128, 128, 128);
+            transition: background-color 0.5s;
+        }
+
+        #content {
+            width: fit-content;
+            height: fit-content;
+            padding: 2rem 2.5rem;
+            border: 0.1rem solid rgba(255, 255, 255, 0.1);
+            border-bottom-width: 0 !important;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0.1rem 0.25rem 0.33rem rgb(0,0,0,0.20), -0.1rem 0.25rem 0.33rem rgb(0,0,0,0.20);
+            color: rgb(255, 255, 255);
+            text-align: center;
+            transition: border-color 0.5s, color 0.5s;
+        }
+
+        #page-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        #page-description {
+            margin-bottom: 1rem;
+        }
+
+        .data {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            width: 10rem;
+            height: fit-content;
+            padding: 0.5rem 1rem 0.6rem 1rem;
+            border: 0.1rem dashed rgb(255, 255, 255);
+            border-radius: 0.5rem;
+            margin: 0 1rem 3rem 1rem;
+            text-align: center;
+            transition: border-color 0.5s;
+        }
+
+        #btn {
+            display: block;
+            width: fit-content;
+            height: fit-content;
+            padding: 0.5rem 1rem;
+            margin: 0 auto 0 auto;
+            border: 0.1rem solid rgb(255, 255, 255);
+            border-radius: 8px;
+            color: rgb(255, 255, 255);
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            transition: color 0.5s, border-color 0.5s;
+        }
+
+        #btn:hover {
+            box-shadow: 0.1rem 0.1rem 0.1rem rgb(0 0 0 / 20%), -0.1rem 0.1rem 0.1rem rgb(0 0 0 / 20%);
+        }
+    </style>
+</head>
+
+<body>
+    <main id="container">
+        <article id="content">
+            <h1 id="page-title">JavaScript Random Background Color Generator</h1>
+            <p id="page-description">The current background-color is: </p>
+            <p id="color-rgb" class="data">rgb(128, 128, 128)</p>
+            <p id="color-hex" class="data">#FFFFFF</p>
+            <p id="color-hsl" class="data">hsl(100, 200%, 15%)</p>
+            <a id="btn" href="#" onclick="generateBg()">New color</a>
+        </article>
+    </main>
+
+    <script>
+
+        // Main function of the script.
+        function generateBg() {
+
+            // Colour object for creating and containing colour values and css properties.
+            const color = {
+
+                // The color value property, which generates a random value between 1 and 255 for each of the red, green and blue properties.
+                value : {
+                    red : Math.floor(Math.random() * 255) + 1,
+                    green : Math.floor(Math.random() * 255) + 1,
+                    blue : Math.floor(Math.random() * 255) + 1,
+                },
+
+                // The css property creates css colour properties using the above generated red, green and blue values.
+                css : {
+
+                    // The rgb property of css generates a css colour property in rgb(0,0,0) and returns it as a string.
+                    rgb : function() {
+                        rgbColor = "rgb" + "(" + color.value.red + ", " + color.value.green + ", " + color.value.blue + ")";
+                        return String(rgbColor);
+                    },
+
+                    // The hex property of css generates a css colour property in hex #000000 and returns it as a string.
+                    // Code adopted from : https://css-tricks.com/converting-color-spaces-in-javascript
+                    hex : function() {
+                        hexRed = color.value.red.toString(16);
+                        hexGreen = color.value.green.toString(16);
+                        hexBlue = color.value.blue.toString(16);
+
+                        if (hexRed.length == 1) {
+                            hexRed = "0" + hexRed;
+                        }
+
+                        if (hexGreen.length == 1) {
+                            hexGreen = "0" + hexGreen;
+                        }
+
+                            if (hexBlue.length == 1) {
+                            hexBlue = "0" + hexBlue;
+                        }
+
+                        return "#" + hexRed + hexGreen + hexBlue;
+                    },
+
+                    // The hsl property of css generates a css colour property in hsl(0,0%,0%) and returns it as a string.
+                    // Code adopted from : https://css-tricks.com/converting-color-spaces-in-javascript
+                    hsl : function () {
+                        r = color.value.red / 255;
+                        g = color.value.green / 255;
+                        b = color.value.blue / 255;
+
+                        let cmin = Math.min(r, g, b),
+                            cmax = Math.max(r, g, b),
+                            delta = cmax - cmin,
+                            hue = 0,
+                            saturation = 0,
+                            lightness = 0;
+
+                        // Calculate Hue
+                        if (delta == 0) {
+                            hue = 0;
+                        } else if (cmax == r) {
+                            hue = ((g - b) / delta) % 6;
+                        } else if (cmax == g) {
+                            hue = (b - r) / delta + 2;
+                        } else {
+                            hue = (r - g) / delta + 4;
+                        }
+
+                        hue = Math.round(hue * 60);
+                        
+                        if (hue < 0) {
+                            hue += 360
+                        }
+
+                        // Calculate Lightness
+                        lightness = (cmax + cmin) / 2;
+
+                        // Calculate Saturation (the value of the saturation variable contains an if statement shorthand in the format: if comparison ? then this : else this)
+                        saturation = delta == 0 ? 0 : delta / (1 - Math.abs(2 * lightness - 1));
+
+                        // Complete calculation
+                        saturation = +(saturation * 100).toFixed(1);
+                        lightness = +(lightness * 100).toFixed(1);
+
+                        return String("hsl(" + hue + ", " + saturation + "%, " + lightness + "%)");
+                    }
+                }
+            };
+
+            // The user interface object contains code for changing the colour, data displayed and adapting to the brightness of the new colour.
+            const ui = {
+
+                // The update property of the ui contains functions for updating the user interface, html & css styles.
+                update : {
+
+                    // The background property contains a function to change the background colour by applying a new css clour style.
+                    background : function() {
+                        document.getElementById("container").style.background = color.css.rgb();
+                    },
+
+                    // The data property contains a function to change the displayed css colour properties for user information.
+                    data: function() {
+                        document.getElementById("color-rgb").innerHTML = color.css.rgb();
+                        document.getElementById("color-hex").innerHTML = color.css.hex();
+                        document.getElementById("color-hsl").innerHTML = color.css.hsl();
+                    },
+
+                    /* The theme property contains a function to change the user interface theme 
+                        from bright to dark depending on the new background colour's brightness. */
+                    theme : function() {
+                        
+                        /* Getting the lightness value from the hsl css colour property.
+                        String splitting code adopted from : https://css-tricks.com/converting-color-spaces-in-javascript */
+                        let separateHsl = color.css.hsl().indexOf(",") > -1 ? "," : " ";
+                        let hslValues = color.css.hsl().substring(4).split(")")[0].split(separateHsl);
+                        
+                        for (let L in hslValues) {
+                            let light = hslValues[L];
+                            if (light.indexOf("%") > -1) {
+                                hslValues[L] = Math.round(light.substring(0,light.length - 1));
+                            }
+                        }
+
+                        let brightness = hslValues[2];
+                        let dataUi = document.getElementsByClassName("data");
+
+                        // If the lightness of the new colour is higher than 50% then the ui css styles are changed to black.
+                        if (brightness > 50) {
+                            document.getElementById("content").style.color = "rgb(0,0,0)";
+                            document.getElementById("content").style.border = "0.1rem solid rgba(255, 255, 255, 0.15)";
+                            document.getElementById("btn").style.color = "rgb(0,0,0)";
+                            document.getElementById("btn").style.border = "0.1rem solid rgb(0, 0, 0)";
+
+                            for (i=0; i < dataUi.length; i++) {
+                                dataUi[i].style.border = "0.1rem dashed rgb(0, 0, 0)";
+                            }
+                        
+                        // If the lightness of the new colour is lower than 50% then the ui css styles are changed to white.
+                        } else {
+
+                            document.getElementById("content").style.color = "rgb(255,255,255)";
+                            document.getElementById("content").style.border = "0.1rem solid rgba(255, 255, 255, 0.1)";
+                            document.getElementById("btn").style.color = "rgb(255,255,255)";
+                            document.getElementById("btn").style.border = "0.1rem solid rgb(255, 255, 255)";
+
+                            for (i=0; i < dataUi.length; i++) {
+                                dataUi[i].style.border = "0.1rem dashed rgb(255, 255, 255)";
+                            }
+                        }
+                    }
+                }
+            };
+
+            // The functions to update the user interface need to be called to be activated / run.
+            ui.update.background();
+            ui.update.data();
+            ui.update.theme();
+        }
+
+        document.onload = generateBg();
+
+    </script>
+</body>

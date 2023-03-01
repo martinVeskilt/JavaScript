@@ -1,0 +1,424 @@
+<!DOCTYPE HTML>
+
+<html lang="en-GB">
+    <head>
+        <title>JS Clock</title>
+        <meta name="description" content="A JavaScript practice exercise in creating a time display.">
+        <meta name="keywords" content="HTML, CSS, JavaScript, Practice">
+        <meta name="author" content="Martin Veskilt">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+       
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                font-family: 'Segoe UI', Open Sans, Geneva, Verdana, sans-serif;
+            }
+    
+            body {
+                background: url('imges/chris-limbrick-puC9ug8xU_4-unsplash.jpg');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+            }
+    
+            #container {
+                display: flex;
+                width: 100vw;
+                height: 100vh;
+                align-items: center;
+                justify-content: center;
+                background: rgba(0, 0, 0, 0.1);
+                transition: background-color 0.5s;
+            }
+
+            #content {
+                width: 512px;
+                height: auto;
+                padding: 1.5rem 3rem;
+                border: 1px solid rgba(255, 255, 255, 0.33);
+                border-radius: 16px;
+                background: rgba(255, 255, 255, 0.1);
+                -webkit-backdrop-filter: blur(32px);
+                backdrop-filter: blur(32px);
+                box-shadow: 0.0625rem 0.125rem 0.25rem rgb(0 0 0 / 25%), -0.0625rem 0.125rem 0.25rem rgb(0 0 0 / 25%);
+                color: #fafafa;
+                text-align: center;
+                text-shadow: 0.03rem 0.05rem 0.0625rem rgba(0,0,0,0.66);
+                transition: border-color 0.5s, color 0.5s;
+            }
+    
+            #page-title {
+                font-size: 3rem;
+                font-weight: normal;
+                line-height: 2.6rem;
+                margin-bottom: 0;
+                padding-bottom: 1.5rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 1);
+            }
+    
+            #tab-menu {
+                display: inline-flex;
+                width: -moz-fit-content;
+                width: fit-content;
+                margin-bottom: 1.5rem;
+            }
+    
+            #tab-menu button {
+                width: 64px;
+                height: 48px;
+                border-top: none;
+                border-right: 1px solid #fff;
+                border-bottom: none;
+                border-left: none;
+                background: transparent;
+                cursor: pointer;
+            }
+
+            #tab-menu button:first-child {
+                border-left: 1px solid #fff;
+            }
+
+            #tab-menu .tab-button img {
+                width: 32px;
+                padding: 0.5rem 1rem;
+                filter: drop-shadow(0.05rem 0.05rem 0 rgb(0 0 0 / 66%));
+            }
+    
+            #tab-menu .tab-button:hover {
+                background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.33), transparent);
+            }
+    
+            .current-button {
+                background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.33), transparent) !important;
+            }
+
+            .current-button:hover {
+                background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.33), transparent) !important;
+                cursor: default !important;
+            }
+    
+            .tab-content {
+                display: none;
+                height: 96px;
+                align-content: center;
+                flex-wrap: wrap;
+            }
+    
+            .current-tab {
+                display: flex;
+            }
+    
+            ul {
+                list-style-type: none;
+                margin: 0 auto;
+            }
+    
+            #clock #date-display {
+                margin: 0;
+                font-size: 1.25rem;
+                letter-spacing: 0.05rem;
+            }
+            
+            #clock #time-display {
+                font-size: 3rem;
+                text-align: center;
+            }
+    
+            #world-clock table {
+                margin: 0 auto;
+                font-size: 1rem;
+                text-align: left;
+            }
+    
+            #world-clock table th {
+                font-weight: normal;
+                letter-spacing: 0.05rem;
+                padding-bottom: 0.3rem;
+            }
+    
+            #world-clock table th:not(:first-child) {
+                padding-left: 2.5rem;
+            }
+            
+            #world-clock table td {
+                width: 72px;
+                padding-left: 0.3rem;
+                padding-bottom: 0.3rem;
+                font-weight: lighter;
+                letter-spacing: 1px;
+            }
+    
+            #stopwatch {
+                flex-wrap: wrap;
+                align-content: baseline;
+            }
+    
+            .content-row {
+                width: 100%;
+            }
+    
+            #stopwatch #stopwatch-display {
+                display: inline-flex;
+                font-size: 3rem;
+                line-height: 2.75rem;
+                margin-bottom: 1.5rem;
+            }
+    
+            #stopwatch-controls {
+                display: inline-flex;
+                margin-left: 1.5rem;
+                margin-top: 0.33rem;
+            }
+    
+            #stopwatch-controls button {
+                border: 3px solid #fff;
+                border-radius: 50%;
+                padding: 4px 4px 2px 4px;
+                background: transparent;
+                filter: drop-shadow(0.05rem 0.05rem 0 rgb(0 0 0 / 33%));
+                transition: all 200ms ease-in-out;
+                cursor: pointer;
+            }
+    
+            #stopwatch-controls button:not(:last-child) {
+                margin-right: 1rem;
+            }
+    
+            #stopwatch-controls button:first-child {
+                background-image: url(icons/play.svg);
+                background-size: 2rem;
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 40px;
+                height: 40px;
+            }
+    
+            #stopwatch-controls button:first-child:hover {
+                background-image: url(icons/play_on.svg);
+                background-color: rgba(200,255,200,0.1);
+                border-color: #ccff90;
+            }
+    
+            #stopwatch-controls button:nth-child(2) {
+                background-image: url(icons/flag.svg);
+                background-size: 1.75rem;
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 40px;
+                height: 40px;
+            }    
+    
+            #stopwatch-controls button:nth-child(2):hover {
+                background-image: url(icons/flag_on.svg);
+                background-color: rgba(255,255,200,0.1);
+                border-color: #fff9c4;
+            }
+    
+            #stopwatch-controls button:last-child {
+                background-image: url(icons/stop.svg);
+                background-size: 2rem;
+                background-repeat: no-repeat;
+                background-position: center;
+                width: 40px;
+                height: 40px;
+            }    
+    
+            #stopwatch-controls button:last-child:hover {
+                background-image: url(icons/stop_on.svg);
+                background-color: rgba(255,200,200,0.1);
+                border-color: #ffccbc;
+            }
+    
+            #stopwatch .content-row ul li {
+                width: -moz-fit-content;
+                width: fit-content;
+                display: inline-flex;
+            }
+    
+            #stopwatch .content-row ul li:not(:last-child) {
+                margin-right: 3rem;
+            }
+    
+            #stopwatch .label {
+                font-variant: small-caps;
+                letter-spacing: 0.05rem;
+            }
+    
+            #stopwatch .content-row ul li p:nth-child(2) {
+                font-weight: lighter;
+                letter-spacing: 1px;
+                margin-left: 0.5rem;
+            }
+    
+        </style>
+    </head>
+    
+    <body>
+        <main id="container">
+            <article id="content">
+    
+                <h1 id="page-title">JavaScript Clock</h1>
+    
+                <form id="tab-menu">
+                    <button class="tab-button current-button" type="button" onclick="jsClock.tabMenu(event, 'clock')" title="Clock"><img src="icons/clock.svg" alt="clock tab icon"></button>
+                    <button class="tab-button" type="button" onclick="jsClock.tabMenu(event, 'world-clock')" title="World Clock"><img src="icons/globe.svg" alt="world clock tab icon"></button>
+                    <button class="tab-button" type="button" onclick="jsClock.tabMenu(event, 'timer')" title="Timer"><img src="icons/timer.svg" alt="timer tab icon"></button>
+                    <button class="tab-button" type="button" onclick="jsClock.tabMenu(event, 'stopwatch')" title="Stopwatch"><img src="icons/stopwatch.svg" alt="stopwatch tab icon"></button>
+                </form>
+    
+                <div id="clock" class="tab-content current-tab">
+                    <ul>
+                        <li><p id="date-display">Loading...</p></li>
+                        <li><p id="time-display">Loading...</p></li>
+                    </ul>
+                </div>
+    
+                <div id="world-clock" class="tab-content">
+                    <table>
+                        <tr>
+                            <th>ESTONIA</th>
+                            <td class="world-time">00:00:00</td>
+                            <th>TURKEY</th>
+                            <td class="world-time">00:00:00</td>
+                            <th>JAPAN</th>
+                            <td class="world-time">00:00:00</td>
+                        </tr>
+                        <tr>
+                            <th>FINLAND</th>
+                            <td class="world-time">00:00:00</td>
+                            <th>EGYPT</th>
+                            <td class="world-time">00:00:00</td>
+                            <th>CHINA</th>
+                            <td class="world-time">00:00:00</td>
+                        </tr>
+                        <tr>
+                            <th>IRELAND</th>
+                            <td class="world-time">00:00:00</td>
+                            <th>NIGERIA</th>
+                            <td class="world-time">00:00:00</td>
+                            <th>INDIA</th>
+                            <td class="world-time">00:00:00</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div id="timer" class="tab-content">
+                    <div class="content-row">
+                        <h2>Timer to be done...</h2>
+                    </div>
+                </div>
+    
+                <div id="stopwatch" class="tab-content">
+                    <div class="content-row">
+                        <p id="stopwatch-display">00:00:000</p>
+                        <form id="stopwatch-controls">
+                            <button type="button" title="start" onclick=""></button>
+                            <button type="button" title="lap" onclick=""></button>
+                            <button type="button" title="stop" onclick=""></button>
+                        </form>
+                    </div>
+                    <div class="content-row">
+                        <ul>
+                            <li><p class="label">LAST</p><p id="last-lap">00:00:000</p></li>
+                            <li><p class="label">BEST</p><p id="best-lap">00:00:000</p></li>
+                            <li><p class="label">TOTAL</p><p id="total-time">00:00:000</p></li>
+                        </ul>
+                    </div>
+                </div>
+    
+            </article>
+        <main>
+    
+        <script type="text/javascript">
+    
+            //Main clock object of JavaScrip Clock.
+            const jsClock = {
+    
+                //Tabbed menu code adapted from https://www.w3schools.com/howto/howto_js_tabs.asp
+                tabMenu (event, content){
+    
+                    //When a tab button is clicked then remove the "current" styling class from all the tab content and button elements.
+                    document.querySelector(".current-tab").classList.remove("current-tab");
+                    document.querySelector(".current-button").classList.remove("current-button");
+    
+                    //Add the "current" styling class to the id respective tab content element to display it.
+                    document.getElementById(content).classList.add("current-tab");
+                    
+                    //Check which tab button was clicked and add the "current" styling class to the button element.
+                    event.currentTarget.classList.add("current-button");
+                },
+                
+                //Basic time function of the clock.
+                updateTime (){
+    
+                    //console.log("Updating time.");
+                    
+                    //Get the current date and time and store it in a variable.
+                    const date = new Date();
+
+                    //Create a format for the date and strore it in an object (also acts as an argument for the toLocale method).
+                    const timeFormat = {
+                        weekday : "long",
+                        day : "numeric",
+                        month : "long",
+                        year : "numeric"
+                    };
+
+                    //Apply locale formating to the date including the above formatting and store it in a variable.
+                    var currentDate = date.toLocaleDateString("en-GB", timeFormat);
+
+                    //Apply locale formating to the time and store it in a variable.
+                    var currentTime = date.toLocaleTimeString("en-GB");
+
+                    //Display the date and time by updating the HTML elements content.
+                    document.getElementById("date-display").innerHTML = currentDate;
+                    document.getElementById("time-display").innerHTML = currentTime;
+
+                    //console.log("Time updated! Current time is: " + currentTime);
+
+                    //Returns the time data stored in the date variable. 
+                    return date;
+
+                },
+
+                //Time conversion into time zones.
+                worldTime (){
+    
+                    //Timezones referenced from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+                    //Timezone option properties stored in an array. 
+                    let zone = [
+                        'Europe/Tallinn',
+                        'Europe/Istanbul',
+                        'Asia/Tokyo',
+                        'Europe/Helsinki',
+                        'Africa/Cairo',
+                        'Asia/Shanghai',
+                        'Europe/Dublin',
+                        'Africa/Lagos',
+                        'Asia/Kolkata'
+                    ];
+    
+                    //
+                    let worldTimeDisplay = document.getElementsByClassName("world-time");
+    
+                    for (let i = 0; i < worldTimeDisplay.length; i++){
+                        let timezoneTime = jsClock.updateTime().toLocaleTimeString("en-GB", {timeZone: zone[i]});
+                        worldTimeDisplay[i].innerHTML = timezoneTime;
+                        /* console.log("Time in " + zone[i] + " is: " + timezoneTime); */
+                    }
+                },
+                
+                //Start the clock with an update interval of 1000ms to get one second updates.
+                start: document.onload = setInterval(
+                    function(){
+                        jsClock.updateTime();
+                        jsClock.worldTime();
+                    }
+                ,1000)
+                
+            };
+        </script>
+    </body>
+</html>

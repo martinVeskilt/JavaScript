@@ -1,0 +1,240 @@
+<!DOCTYPE HTML>
+
+<head>
+    <title>JS Timer</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="A JavaScript practice exercise in creating a countdown timer.">
+    <meta name="keywords" content="HTML, CSS, JavaScript, Practice">
+    <meta name="author" content="Martin Veskilt">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Open Sans, Geneva, Verdana, sans-serif;
+        }
+
+        #container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: rgb(190 169 104);
+            transition: background-color 0.5s;
+        }
+
+        #content {
+            width: fit-content;
+            height: fit-content;
+            padding: 2rem 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0.3rem 0.3rem 0.6rem rgb(0 0 0 / 20%), -0.3rem 0.3rem 0.6rem rgb(0 0 0 / 20%);
+            color: rgb(0, 0, 0);
+            text-align: center;
+            transition: border-color 0.5s, color 0.5s;
+        }
+
+        #page-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        #page-description {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: bold;
+            display: none;
+        }
+        
+        #timer-display {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            width: fit-content;
+            height: fit-content;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0 1rem 2rem 1rem;
+            text-align: center;
+            transition: border-color 0.5s;
+        }
+
+        #timer-display h2 {
+            font-size: 2rem;
+        }
+
+        #timer-display .display-label {
+            text-transform: uppercase;
+            font-size: 1rem;
+        }
+
+        #timer-display .display-label:not(:last-child) {
+            padding-right: 1rem;
+        }
+
+        #timer-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: auto;
+            height: fit-content;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0 1rem 0.5rem 1rem;
+            text-align: center;
+            transition: border-color 0.5s;
+        }
+
+        #timer-input input {
+            display: inline-block;
+            width: fit-content;
+            height: fit-content;
+            padding: 0.5rem 0rem 0.5rem 1rem;
+            margin: 0 1rem 0 auto;
+            background: rgba(0, 0, 0, 0.1);
+            border: 2px solid rgb(0, 0, 0);
+            border-radius: 8px;
+            color: rgb(0, 0, 0);
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            transition: color 0.5s, border-color 0.5s;
+        }
+
+        #timer-controls li {
+            list-style-type: none;
+            display: inline-block;
+            margin-right: 1rem;
+        }
+
+        #btn {
+            display: block;
+            width: fit-content;
+            height: fit-content;
+            padding: 0.5rem 1rem;
+            margin: 0 auto 0 auto;
+            border: 2px solid rgb(0, 0, 0);
+            border-radius: 8px;
+            color: rgb(0, 0, 0);
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            transition: color 0.5s, border-color 0.5s;
+        }
+
+        #btn:hover {
+            background:rgba(255, 255, 255, 0.1);
+            box-shadow: 0.1rem 0.1rem 0.1rem rgb(0 0 0 / 20%), -0.1rem 0.1rem 0.1rem rgb(0 0 0 / 20%);
+        }
+    </style>
+</head>
+
+<body>
+    <main id="container">
+        <article id="content">
+
+            <h1 id="page-title">JavaScript Countdown Timer</h1>
+            <p id="page-description">Time remaining</p>
+
+            <div id="timer-display">
+                <h2>
+                    <span id="display-days">0</span>
+                    <span class="display-label">Days</span>  
+                    <span id="display-hours">0</span>
+                    <span class="display-label">Hours</span>   
+                    <span id="display-minutes">0</span>
+                    <span class="display-label">Minutes</span> 
+                    <span id="display-seconds">0</span>
+                    <span class="display-label">Seconds</span> 
+                </h2>
+            </div>
+
+            <div id="timer-input">
+                <form action="">
+                    <input type="number" id="input-days" name="days" min="0" max="27" value="0">
+                    <input type="number" id="input-hours" name="hours" min="0" max="23" value="0">
+                    <input type="number" id="input-minutes" name="minutes" min="0" max="59" value="0">
+                    <input type="number" id="input-seconds" name="seconds" min="0" max="59" value="0">
+                </form>
+            </div>
+
+            <ul id="timer-controls">
+                <li><a id="btn" href="#" onclick="jsTimer.start()">Start</a></li>
+                <li><a id="btn" href="#" onclick="pauseTimer()">Pause</a></li>
+                <li><a id="btn" href="#" onclick="resetTimer()">Reset</a></li>
+            </ul>
+
+        </article>
+    <main>
+
+    <script>
+
+        // Main object of the javascript timer.
+        const jsTimer = {
+
+            //Get and store the duration of the timer countdown.
+            start(){
+                //Get user input values for the timer duration.
+                days = document.getElementById("input-days").value;
+                hours = document.getElementById("input-hours").value;
+                minutes = document.getElementById("input-minutes").value;
+                seconds = document.getElementById("input-seconds").value;
+                console.log("User Input: " + days + " days  " + hours + " hours  " + minutes + " minutes  " + seconds  + " seconds  ");
+                
+                //Calculate totals for counting.
+                daysToSeconds = (((days * 24) * 60) * 60);
+                hoursToSeconds = ((hours * 60) * 60);
+                minutesToSeconds = minutes * 60;
+                totalSeconds = daysToSeconds + hoursToSeconds + minutesToSeconds + (seconds * 1);
+                console.log("Total timer duration is " + totalSeconds + " seconds.");
+
+                jsTimer.countdown();
+            },
+
+            display : function(){
+
+                //Set time values to display.
+                document.getElementById("display-days").innerHTML = days;
+                document.getElementById("display-hours").innerHTML = hours;
+                document.getElementById("display-minutes").innerHTML = minutes;
+                document.getElementById("display-seconds").innerHTML = seconds;
+                console.log("Updated timer display time.");
+
+            },
+
+            //How to count down time?
+            
+            //How many times to count days?
+            //How many times to count hours?
+            //How many times to count minutes?
+            //How many times to count seconds?
+
+            countdown : function(){
+
+                while (totalSeconds > 0){
+                    totalSeconds = totalSeconds--;
+                    setTimeout(tickTimer, 1000);
+                    break;
+                }
+
+                function tickTimer(){
+                    console.log("Counted one second.");
+                    seconds--;
+                    jsTimer.display();
+                    jsTimer.countdown();
+                }
+            
+            }
+        }
+    </script>
+</body>

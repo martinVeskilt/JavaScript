@@ -1,0 +1,40 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <title>JS Create Element</title>
+    </head>
+    <body>
+        <div id="container">
+
+            <!-- A simple form to get user input in the form of text and a button to call the js create() function. -->
+            <form>
+                <input type="text" id="user-content" placeholder="Type something here.">
+                <button type="button" onclick="create()">Create</button>
+            </form>
+
+            <div id="content"></div>
+            </div>
+
+        </div>
+        <script>
+            function create(){
+
+                // Get user entered text in the input text box.
+                const userContent = document.getElementById("user-content").value;
+                
+                // Create a new node with user entered text.
+                let node = document.createTextNode(userContent);
+
+                // Create a new html paragraph element.
+                let paragraph = document.createElement("p");
+
+                // Add the node with the text content to the paragraph element.
+                paragraph.appendChild(node);
+
+                // Add the p element inside the div element with the id content.
+                document.getElementById("content").appendChild(paragraph);
+
+            }
+        </script>
+    </body>
+</html>

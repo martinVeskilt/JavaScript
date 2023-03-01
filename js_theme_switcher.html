@@ -1,0 +1,220 @@
+<!doctype html>
+
+<html>
+    
+    <head>
+        
+        <title>JavaScript Theme Switcher</title>
+        <meta author="Martin Veskilt">
+        
+        <style>
+            
+            body {
+                background: black;
+                font-family: 'Open Sans', sans-serif;
+            }
+            
+            #page_container {
+                margin: 1.5em 1em 0 1em;
+                padding: 0.5em 2em;
+                background: grey;
+                border-radius: 1em;
+                border: 1px solid #999999;
+            }
+            
+           section {
+                color: #ffffff;
+                margin-bottom: 2em;
+                padding-bottom: 2em;
+                border-bottom: 1px solid darkgrey;
+            }
+            
+            .section_title {
+                font-weight: bold;
+                font-size: 1.5em;
+                margin: 1em 0 1em 0;
+            }
+            
+            .section_images {
+                display: flex;
+                margin: 0 auto;
+            }
+            
+            .section_images img {
+                list-style-type: none;
+                display: inline-flex;
+                flex-direction: row;
+                width: 150px;
+                height: 150px;
+                padding: 0;
+                margin: 0 1em 0 0;
+                border: 1px solid #ffffff;
+                border-radius: 1em;
+            }
+                    
+            .theme_toggle_button {
+                color: #ffffff;
+                display: flex;
+                border: 1px solid #ffffff;
+                border-radius: 1em;
+                padding: 0.5em 1em;
+                font-weight: bold;
+                line-height: 1.5em;
+                background-color: transparent;
+                margin: 0 auto;
+            }
+            
+            .theme_toggle_button:hover {
+                color: rgb(204, 255, 0);
+                border: 1px solid rgb(204, 255, 0);
+                background-color: transparent;
+            }
+            
+            
+            /* LIGHT THEME STYLES */
+            
+            .light_theme_body {
+                background: #FFFFFF;
+            }
+            
+            .light_theme_container {
+                background-color: #e7e7e7 !important;
+            }
+            
+            .light_theme_section {
+                color: #000000;
+                border-bottom: 1px solid #000000;
+            }
+            
+            .light_theme_images {
+                border: 1px solid #000000 !important;
+            }
+                    
+            .light_theme_buttons {
+                color:  #000000;
+                border: 1px solid  #000000;
+                background-color: transparent;
+            }
+            
+            .light_theme_buttons:hover {
+                color: #ffffff;
+                border: 1px solid #000000;
+                background-color: #000000;
+            }
+        </style>
+        
+    </head>
+    
+    <body>
+        
+        <div id="page_container">
+            
+            <section class="content_section">
+                <h1 class="section_title">JavaScript Based Dark Theme Toggle</h1>
+                <p class="section_text">
+                    This page demonstrates how to switch css styles with JavaScript to enable a theme switch.
+                </p>
+                            
+            </section>
+            
+            <section class="content_section">
+                <h2 class="section_title">About Dark Themes</h2>
+                
+                <p class="section_text">
+                    Dark themes save power by reducing the amount of brightness that a screen has to produce to display the image. This power saving varies from one screen technology to another, with the best power savings achieved on OLED screens.
+                </p>
+                
+                <div class="section_images">
+                    <img src="#" alt="">
+                    <img src="#" alt="">
+                    <img src="#" alt="">
+                </div>
+                
+            </section>
+            
+            <section class="content_section">
+                <h2 class="section_title">Choose Your Theme</h2>
+                
+                <button class="button theme_toggle_button" onclick="themeToggle()">Switch to Light Theme</button>
+            </section>
+            
+            
+        </div>
+        
+        <script type="application/javascript">
+            
+            //Copied from Mimo practice project 12: Dark Mode.
+            // function selectTheme(mode) {
+
+            // var color = "ghostWhite";
+            // var image = "/img/light-icon.png";
+            // var label = "Light Mode";
+
+            // if (mode === "dark") {
+            //  color = "darkSlateBlue";
+            //  image = "/img/dark-icon.png";
+            //  label = "Dark Mode";
+
+           //   } else {
+           //   color = "dimGray";
+           //   image = "/img/ninja-icon.png";
+           //   label = "Ninja Mode";
+           //    }
+
+            // console.log(label);
+
+            // document.getElementById("icon").src = image;
+           //  document.getElementById("theme").style.backgroundColor = color;
+            // document.getElementById("label").innerHTML = label;
+
+           // }
+            
+            // Function to run when clicking the theme toggle button.
+            function themeToggle() {
+                
+                // Stores the "body" element and toggles the "light_theme_body" class.
+                var body = document.body;
+                body.classList.toggle("light_theme_body");
+                
+                // Stores the div with the ID "container" and toggles the "light_theme_container" class.
+                var container = document.getElementById("page_container");
+                container.classList.toggle("light_theme_container");
+                
+                // Stores all elements with the class "content_section",
+                // cycles through them with the for loop and applies the "light_theme_section" class to each one.
+                var section = document.getElementsByClassName("content_section");
+                for (i = 0; i < section.length; i++) {
+                    section[i].classList.toggle("light_theme_section");
+                }
+                
+                // Stores all elements with the tag name "img",
+                // cycles through them with the for loop and applies the "light_theme_images" class to each one.
+                var images = document.getElementsByTagName("IMG");
+                for (i = 0; i < images.length; i++) {
+                    images[i].classList.toggle("light_theme_images");
+                }
+                
+                // Stores all elements with the tag name "button",
+                // cycles through them with the for loop and applies the "light_theme_buttons" class to each one.
+                var buttons = document.getElementsByTagName("BUTTON");
+                for (i = 0; i < buttons.length; i++) {
+                    buttons[i].classList.toggle("light_theme_buttons");
+                }
+                                
+                var themeStatus = buttons[0].classList.contains("light_theme_buttons");
+                
+                var buttonLabel = document.getElementsByClassName("theme_toggle_button");
+                
+                if (themeStatus === true) {    
+                    buttonLabel[0].innerHTML = "Switch to Dark Theme";
+                } else {
+                    buttonLabel[0].innerHTML = "Switch to Light Theme";
+                }
+            
+                console.log("Finished changing themes.");
+            }
+        </script>
+        
+    </body>
+    
+</html>

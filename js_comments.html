@@ -1,0 +1,154 @@
+<!doctype html>
+
+<html>
+    
+    <head>
+        <title>JavaScript Comments</title>
+        <meta author="Martin Veskilt">
+        
+        <style>
+            body {
+                margin-top: 1.5em;
+                background: black;
+                font-family: 'Open Sans', sans-serif;
+            }
+            
+            #page_container {
+                width: 90%;
+                margin: 0 auto;
+                padding: 0.5em 2em;
+                background: grey;
+                border-radius: 1em;
+            }
+            
+           section {
+                margin-bottom: 2em;
+                padding-bottom: 2em;
+                border-bottom: 1px solid darkgrey;
+            }
+            
+            .section_title {
+                font-weight: bold;
+                font-size: 1.5em;
+                margin: 1em 0 1em 0;
+                color: #ffffff;
+            }
+            
+            #comment_content {
+                display: flex;
+                width: 80%;
+                height: 2em;
+                border-radius: 1em;
+                padding: 1em;
+                margin: 0 auto 1em auto;
+            }
+            
+            .comment_button {
+                display: flex;
+                border: none;
+                border-radius: 1em;
+                padding: 0.5em 1em;
+                font-weight: bold;
+                background-color: #94cd31;
+                margin: 0 auto;
+            }
+            
+             .comment_button {
+                color: #ffffff;
+                display: flex;
+                border: 1px solid #ffffff;
+                border-radius: 1em;
+                padding: 0.5em 1em;
+                font-weight: bold;
+                line-height: 1.5em;
+                background-color: transparent;
+                margin: 0 auto;
+            }
+            
+            .comment_button:hover {
+                color: rgb(204, 255, 0);
+                border: 1px solid rgb(204, 255, 0);
+                background-color: transparent;
+            }
+            
+            .content_section {
+                color: white;
+            }
+            
+            #user_comments {
+                padding-bottom: 2em;
+                padding: 0;
+            }
+            
+            .user_comments {
+                display: flex;
+                width: 80%;
+                background-color: darkgray;
+                padding: 0.5em 1em;
+                border-radius: 0.5em;
+                list-style-type: none;
+                margin: 0 auto 1em auto;
+                font-size: 1rem;
+                color: white;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="page_container">
+            
+            <section class="content_section">
+                <h1 class="section_title">JavaScript Based Comments</h1>
+                <p class="section_text">
+                    This page demonstrates how to take user input from a textarea input element with JavaScript and create comments from it.
+                </p>
+                            
+            </section>
+            
+            <section id="comments_section">
+                <h2 class="section_title">Add your comment below</h2>
+                <textarea id="comment_content" placeholder="Let us know what you think..." ></textarea>
+                <button class="comment_button" onclick="userComment()">Add Comment</button>
+                
+            </section>
+            
+            <section>
+                <h2 class="section_title">User comments</h2>
+                <ul id="user_comments">
+                    
+                </ul>
+            </section>
+            
+            
+        </div>
+        
+        <script type="application/javascript">
+            
+            // This function runs when the user clicks the "Add Comment" button.
+            function userComment() {
+                
+                // Get the text the user entered in the textarea input element.
+                var commentContent = document.getElementById("comment_content").value;
+                
+                // Create a new List Item element to contain the comment & its text.
+                var commentCreate = document.createElement("li");
+                var commentAddContent = document.createTextNode(commentContent);
+                
+                // Insert the text inside the List Item element.
+                commentCreate.appendChild(commentAddContent);
+               
+                // Insert the created comment inside the Unordered List element with the id of user_comments.
+                document.getElementById("user_comments").appendChild(commentCreate);
+                
+                // Give the newly created comment List Item a class of user_comments to stlye it with existing CSS.
+                commentCreate.className = "user_comments";
+                
+                // Clear the textarea input element's value and set it to display the placeholder text.
+                document.getElementById("comment_content").value = "";
+            }
+            
+        </script>
+        
+    </body>
+    
+</html>
